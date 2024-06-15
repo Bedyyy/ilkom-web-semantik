@@ -1,0 +1,25 @@
+h3 {
+    font-weight: bold;
+    color: white;
+}
+
+p {
+    color: white;
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    font-weight: bold;
+}
+
+.text-animation {
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.text-animation:hover {
+    transform: scale(1.05);
+}

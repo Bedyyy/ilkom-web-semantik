@@ -1,0 +1,23 @@
+/* BOrder untuk haki.html */
+table,
+thead,
+tr,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+/* Center untuk Panduan.html */
+.center {
+  overflow: hidden;
+}
+
+.center img {
+  transition: all 1.5s ease;
+  transform: scale(1.3); /* initial scale */
+}
+
+.center:hover img {
+  transform: scale(1); /* zoom out to original size on hover */
+}

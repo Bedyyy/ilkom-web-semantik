@@ -1,0 +1,126 @@
+:root {
+    --main-color: rgb(25, 164, 183);
+}
+
+.table-head {
+    background-color: rgb(25, 164, 183) !important;
+}
+
+.slide-left {
+    animation: slideLeft 0.5s ease-out forwards;
+}
+
+.timeline-section {
+    padding: 50px 0;
+}
+
+section.tablesect {
+    padding-bottom: 0px !important;
+}
+
+.section-title {
+    font-family: 'Poppins', sans-serif;
+    /* Sesuaikan dengan font yang digunakan */
+    font-size: 46px;
+    /* Sesuaikan ukuran font */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    /* Jarak antara judul dan tabel */
+}
+
+section.timelinesect {
+    position: relative;
+    max-width: 1200px;
+    margin: 100px auto;
+    padding-block: 0 !important;
+}
+
+section.timelinesect .timeline-body {
+    padding: 10px 50px;
+    position: relative;
+    width: 50%;
+
+}
+
+section.timelinesect .checkpoint {
+    padding: 20px 30px;
+    background-color: white;
+    position: relative;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+    color: rgb(100, 100, 100);
+    font-size: 20px;
+}
+
+.checkpoint h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: black;
+}
+
+h2.year {
+    color: var(--main-color);
+}
+
+.cp-l {
+    border-right: 6px solid var(--main-color);
+}
+
+.cp-r {
+    border-left: 6px solid var(--main-color);
+}
+
+section.timelinesect .left-container {
+    left: 0;
+}
+
+section.timelinesect .right-container {
+    left: 50%;
+}
+
+.left-container {
+    text-align: right;
+}
+
+.dot {
+    height: 40px;
+    width: 40px;
+    background-color: var(--main-color);
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    right: -20px;
+    top: 32px;
+    z-index: 10;
+}
+
+.right-container .dot {
+    left: -20px;
+}
+
+.timelinesect::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 100%;
+    background-color: rgb(212, 212, 212);
+    top: 0;
+    left: 50%;
+    margin-left: -2px;
+    z-index: -1;
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

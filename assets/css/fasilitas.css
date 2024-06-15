@@ -1,0 +1,12 @@
+p {
+    margin-right: 35px;
+    text-align: justify;
+}
+
+.text-animation {
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  .text-animation:hover {
+    transform: scale(1.05);
+  }

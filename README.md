@@ -1,2 +1,2 @@
-# ilkom-web-semantik
-Repository Web Semantik Ilmu Komputer
+# Jentik-Front-End
+Repositori Final Project Jejaring Semantik Front-End
