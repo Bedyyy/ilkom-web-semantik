@@ -7,27 +7,30 @@ class WebProdiIlkom{
 
     public function __construct()
     {
-      $this->db  = sparql_connect("http://localhost:3030/test2");
+      $this->db  = sparql_connect("http://localhost:3030/jartik/");
     }
 
     public function getRPS($search=null){
         $query = "
             PREFIX d:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-            PREFIX al:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-            PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-            PREFIX n:<http://www.semanticweb.org/naren/ontologies/2024/4/staff#>
-            PREFIX ad:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX owl: <http://www.w3.org/2002/07/owl#>
+            PREFIX dosen:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
 
-            SELECT ?kodeRPS ?tahunPembuatan ?statusRPS
-            WHERE {
-                ?rps d:kodeRPS ?kodeRPS;
-                    d:tahunPembuatan ?tahunPembuatan;
-                    d:statusRPS ?statusRPS.
-            FILTER(regex(str(?statusRPS), '$search','i') || regex(str(?kodeRPS), '$search','i') || regex(str(?tahunPembuatan), '$search','i'))}
-            ";
+            SELECT ?kodeRPS ?statusRPS ?tahunPembuatan ?namaMatkul ?kodeMatkul ?namaDosen
+            WHERE { 
+                ?rps   d:kodeRPS ?kodeRPS;
+                        d:tahunPembuatan ?tahunPembuatan;
+                        d:statusRPS ?statusRPS.
+                
+                ?matkul d:mempunyai ?rps;
+                        d:namaMatkul ?namaMatkul;
+                        d:kodeMatkul ?kodeMatkul.
+                
+                OPTIONAL {
+                    ?rps d:disusun ?dosen.
+                    ?dosen dosen:namaDosen ?namaDosen.
+                }
+                FILTER(regex(str(?statusRPS), '$search','i') || regex(str(?kodeRPS), '$search','i') || regex(str(?tahunPembuatan), '$search','i'))}
+                ";
 
         $result = sparql_query($query);
 
@@ -38,6 +41,9 @@ class WebProdiIlkom{
                 'kodeRPS' => $row['kodeRPS'],
                 'tahunPembuatan' => $row['tahunPembuatan'],
                 'statusRPS' => $row['statusRPS'],
+                'kodeMatkul' => $row['kodeMatkul'], 
+                'namaMatkul' => $row['namaMatkul'],
+                'namaDosen' => $row['namaDosen'],
             ];
         }
 
