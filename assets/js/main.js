@@ -369,8 +369,8 @@ function displayResults(data, query) {
 
     let table = document.createElement('table');
     table.id = 'resultsTable-' + category;
-    table.style.width = '100%'; // Set the width of the table
-    table.style.borderCollapse = 'collapse'; // Collapse the borders
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
     table.className = 'myTableClass';
     resultsContainer.appendChild(table);
 
@@ -394,8 +394,11 @@ function displayResults(data, query) {
   }
 
   if (totalData === 0) {
-    let p = document.createElement('p');
-    p.textContent = 'No result found, try another';
-    resultsContainer.appendChild(p);
-  }
+    let h1 = document.createElement('h1');
+    h1.textContent = 'No result found, try another';
+    h1.style.fontWeight = 'bold';
+    h1.style.fontSize = '2em';
+    h1.style.textAlign = 'center';
+    resultsContainer.appendChild(h1);
+}
 }

@@ -17,9 +17,9 @@ class WebProdiIlkom{
             PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
             PREFIX n:<http://www.semanticweb.org/naren/ontologies/2024/4/staff#>
             PREFIX ad:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX owl: <http://www.w3.org/2002/07/owl#>
+            PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX owl:<http://www.w3.org/2002/07/owl#>
             ";
     }
 }
