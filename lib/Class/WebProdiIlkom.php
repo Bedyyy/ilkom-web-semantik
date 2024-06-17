@@ -7,7 +7,7 @@ class WebProdiIlkom{
 
     public function __construct()
     {
-      $this->db  = sparql_connect("http://localhost:3030/final");
+      $this->db  = sparql_connect("http://localhost:3030/jartik2");
     }
 
     public function getPrefix(){
