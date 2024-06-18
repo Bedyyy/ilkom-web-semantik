@@ -72,7 +72,7 @@ class Nilai extends WebProdiIlkom{
         $prefix = $this->getPrefix();
         $query = $prefix . "
 
-            SELECT ?ipkMahasiswa ?bobotAudit ?bobotITSec ?bobotJejaringSemantik ?bobotMachineLearning ?bobotMetFor ?bobotPKB ?bobotPMPL ?bobotSI ?nilaiAudit ?nilaiITSec ?nilaiJejaringSemantik ?nilaiMachineLearning ?nilaiMetFor ?nilaiPKB ?nilaiPMPL ?nilaiSI
+            SELECT ?ipkMahasiswa ?bobotAudit ?bobotITSec ?bobotJejaringSemantik ?bobotMachineLearning ?bobotMetFor ?bobotPKB ?bobotPMPL ?bobotSI ?nilaiAudit ?nilaiITSec ?nilaiJejaringSemantik ?nilaiMachineLearning ?nilaiMetFor ?nilaiPKB ?nilaiPMPL ?nilaiSI ?namaMahasiswa ?nim ?statusKemahasiswaan ?semester
             WHERE {
                 ?nilai ad:ipkMahasiswa ?ipkMahasiswa;
                     ad:bobotAudit ?bobotAudit;
@@ -140,7 +140,7 @@ class Nilai extends WebProdiIlkom{
         $prefix = $this->getPrefix();
         $query = $prefix . "
 
-            SELECT ?ipkMahasiswa ?bobotAudit ?bobotITSec ?bobotJejaringSemantik ?bobotMachineLearning ?bobotMetFor ?bobotPKB ?bobotPMPL ?bobotSI ?nilaiAudit ?nilaiITSec ?nilaiJejaringSemantik ?nilaiMachineLearning ?nilaiMetFor ?nilaiPKB ?nilaiPMPL ?nilaiSI
+            SELECT ?ipkMahasiswa ?bobotAudit ?bobotITSec ?bobotJejaringSemantik ?bobotMachineLearning ?bobotMetFor ?bobotPKB ?bobotPMPL ?bobotSI ?nilaiAudit ?nilaiITSec ?nilaiJejaringSemantik ?nilaiMachineLearning ?nilaiMetFor ?nilaiPKB ?nilaiPMPL ?nilaiSI ?namaDosen ?nip ?statusKeaktifanDosen ?unitKerjaDosen
             WHERE {
                 ?nilai ad:ipkMahasiswa ?ipkMahasiswa;
                     ad:bobotAudit ?bobotAudit;
