@@ -3,6 +3,7 @@
 require_once "Class/Mahasiswa.php";
 require_once "Class/Rps.php";
 require_once "Class/Staff.php";
+require_once "Class/Dosen.php";
 
 
 $search = null;
@@ -14,6 +15,8 @@ if (isset($_GET['search'])) {
 $mahasiswa = new Mahasiswa();
 $rps = new Rps();
 $staff = new Staff();
+$dosen = new Dosen();
+
 $response = [
     'mahasiswa' => $mahasiswa->getAllMahasiswa($search),
     'rps' => $rps->getAllRps($search),
@@ -32,5 +35,8 @@ $response = [
 
     //Staff
     'staff_Jadwal' => $staff->getStaffJadwal($search),
+
+    //Dosen
+
 ];
 echo json_encode($response, JSON_PRETTY_PRINT);
