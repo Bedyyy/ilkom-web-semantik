@@ -89,10 +89,10 @@ class Rps extends WebProdiIlkom{
                 ?rps d:kodeRPS ?kodeRPS;
                     d:tahunPembuatan ?tahunPembuatan;
                     d:statusRPS ?statusRPS;
-                    d:dimiliki ?matkul.
+                    d:dipunyai ?matkul.
                 ?matkul d:namaMatkul ?namaMatkul;
                     d:kodeMatkul ?kodeMatkul;
-                    d:bobotSKS ?bobotSKS;
+                    d:bobotSKS ?bobotSKS.
             ";
         if ($search == "matakuliah") {
             $query .= "}";

@@ -1,110 +1,34 @@
 <?php
+
 require_once "WebProdiIlkom.php";
 
-class Dosen extends WebProdiIlkom {
-    // Fungsi untuk mendapatkan semua data dosen
-    /* function getDataDosen($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
-            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?namaOrganisasi ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
-            WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    d:mengajar ?mhs ;
-                    d:mengampu ?mk ;
-                    all:membimbing ?prs ;
-                    all:membina ?org ;
-                    d:menghadiri ?jdwl ;
-                    all:mengisi ?nilai .
-                ?mhs k:namaMahasiswa ?namaMahasiswa;
-                    k:nim ?nim;
-                    k:statusKemahasiswaan ?statusKemahasiswaan;
-                    k:semester ?semester.
-                ?mk all:namaMatkul ?namaMatkul;
-                    all:kodeMatkul ?kodeMatkul;
-                    all:bobotSKS ?bobotSKS.
-                ?prs all:namaKegiatan ?namaKegiatan.
-                ?org all:namaOrganisasi ?namaOrganisasi.
-                ?jdwl all:hariJadwal ?hariJadwal.
-                ?nilai c:ipkMahasiswa ?ipkMahasiswa.
-                FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?namaMahasiswa), '$action', 'i') ||
-                    regex(str(?nim), '$action', 'i') ||
-                    regex(str(?statusKemahasiwaan), '$action', 'i') ||
-                    regex(str(?namaMatkul), '$action', 'i') ||
-                    regex(str(?kodeMatkul), '$action', 'i') ||
-                    regex(str(?bobotSKS), '$action', 'i') 
-                    regex(str(?namaKegiatan), '$action', 'i') ||
-                    regex(str(?namaOrganisasi), '$action', 'i') ||
-                    regex(str(?hariJadwal), '$action', 'i') ||
-                    regex(str(?ipkMahasiswa), '$action', 'i') ||
-                    regex(str(?semester), '$action', 'i') ||
-                )
-            }
-        ";
-
-        $result = sparql_query($query);
-
-        $data = [];
-        while ( $row = sparql_fetch_array($result) ) {
-            $data[] = [
-                'nip' => $row->nip->getValue(),
-                'namaDosen' => $row->namaDosen->getValue(),
-                'statusKeaktifanDosen' =>$row->statusKeaktifanDosen->getValue(),
-                'unitKerjaDosen' => $row->unitKerjaDosen->getValue(),
-                'namaMahasiswa' => $row->namaMahasiswa->getValue(),
-                'nim' => $row->nim->getValue(),
-                'statusKemahasiswaan' => $row->statusKemahasiswaan->getValue(),
-                'semester' => $row->semester->getValue(),
-                'namaMatkul' => $row->namaMatkul->getValue(),
-                'kodeMatkul' => $row->kodeMatkul->getValue(),
-                'bobotSKS' => $row->bobotSKS->getValue(),
-                'namaKegiatan' => $row->namaKegiatan->getValue(),
-                'hariJadwal' => $row->hariJadwal->getValue(),
-                'ipkMahasiswa' => $row->ipkMahasiswa->getValue(),
-            ];
-        }
-
-        return $data;
-    } */
+class Dosen extends WebProdiIlkom{
 
     public function __construct()
     {
-        parent::__construct();
+      parent::__construct();
     }
 
-    function getAllDosen($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getAllDosen($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen .
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen .
         ";
 
-        if ($action == "dosen") {
+        if ($search == "dosen") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i')
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i')
                 )}
             ";
         }
@@ -124,38 +48,35 @@ class Dosen extends WebProdiIlkom {
         return $data;
     }
 
-    function getDosenMahasiswa($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getDosenMahasiswa($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?nim ?statusKemahasiswaan ?semester 
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    d:mengajar ?mhs .
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    al:mengajar ?mhs .
                 ?mhs k:namaMahasiswa ?namaMahasiswa;
                     k:nim ?nim;
                     k:statusKemahasiswaan ?statusKemahasiswaan;
                     k:semester ?semester.
         ";
 
-        if ($action == "mahasiswa") {
+        if ($search == "mahasiswa") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?namaMahasiswa), '$action', 'i') ||
-                    regex(str(?nim), '$action', 'i') ||
-                    regex(str(?statusKemahasiwaan), '$action', 'i') ||
-                    regex(str(?semester), '$action', 'i')
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?namaMahasiswa), '$search', 'i') ||
+                    regex(str(?nim), '$search', 'i') ||
+                    regex(str(?statusKemahasiwaan), '$search', 'i') ||
+                    regex(str(?semester), '$search', 'i')
                 )}
             ";
         }
@@ -179,36 +100,33 @@ class Dosen extends WebProdiIlkom {
         return $data;
     }
 
-    function getDosenMatakuliah($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getDosenMatakuliah($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    d:mengampu ?mk .
-                ?mk all:namaMatkul ?namaMatkul;
-                    all:kodeMatkul ?kodeMatkul;
-                    all:bobotSKS ?bobotSKS.
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    al:mengampu ?mk .
+                ?mk d:namaMatkul ?namaMatkul;
+                    d:kodeMatkul ?kodeMatkul;
+                    d:bobotSKS ?bobotSKS.
         ";
 
-        if ($action == "mata kuliah" || $action == "matakuliah" || $action == "matkul" || $action == "mk") {
+        if ($search == "mata kuliah" || $search == "matakuliah" || $search == "matkul" || $search == "mk") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?namaMatkul), '$action', 'i') ||
-                    regex(str(?kodeMatkul), '$action', 'i') ||
-                    regex(str(?bobotSKS), '$action', 'i') 
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?namaMatkul), '$search', 'i') ||
+                    regex(str(?kodeMatkul), '$search', 'i') ||
+                    regex(str(?bobotSKS), '$search', 'i') 
                 )}
             ";
         }
@@ -216,7 +134,7 @@ class Dosen extends WebProdiIlkom {
         $result = sparql_query($query);
 
         $data = [];
-        while ( $row = sparql_fetch_array($result) ) {
+        while( $row = sparql_fetch_array($result) ) {
             $data[] = [
                 'nip' => $row['nip'],
                 'namaDosen' => $row['namaDosen'],
@@ -231,34 +149,31 @@ class Dosen extends WebProdiIlkom {
         return $data;
     }
 
-    function getDosenPrestasi($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getDosenPrestasi($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    all:membimbing ?prs .
-                ?prs all:namaKegiatan ?namaKegiatan.
-                ?jdwl all:hariJadwal ?hariJadwal.
-                ?nilai c:ipkMahasiswa ?ipkMahasiswa.
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    d:membimbing ?prs .
+                ?prs d:namaKegiatan ?namaKegiatan.
+                ?jdwl d:hariJadwal ?hariJadwal.
+                ?nilai ad:ipkMahasiswa ?ipkMahasiswa.
         ";
 
-        if ($action == "prestasi") {
+        if ($search == "prestasi") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?namaKegiatan), '$action', 'i')
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?namaKegiatan), '$search', 'i')
                 )}
             ";
         }
@@ -279,32 +194,29 @@ class Dosen extends WebProdiIlkom {
         return $data;
     }
 
-    function getDosenOrganisasi($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getDosenOrganisasi($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?namaOrganisasi ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    all:membina ?org .
-                ?org all:namaOrganisasi ?namaOrganisasi.
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    d:membina ?org .
+                ?org d:namaOrganisasi ?namaOrganisasi.
         ";
 
-        if ($action == "organisasi") {
+        if ($search == "organisasi") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?namaOrganisasi), '$action', 'i')
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?namaOrganisasi), '$search', 'i')
                 )}
             ";
         }
@@ -325,33 +237,30 @@ class Dosen extends WebProdiIlkom {
         return $data;
     }
 
-    function getDosenJadwal($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getDosenJadwal($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    d:menghadiri ?jdwl .
-                ?jdwl all:hariJadwal ?hariJadwal.
-                ?nilai c:ipkMahasiswa ?ipkMahasiswa.
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    al:menghadiri ?jdwl .
+                ?jdwl d:hariJadwal ?hariJadwal.
+                ?nilai ad:ipkMahasiswa ?ipkMahasiswa.
         ";
 
-        if ($action == "jadwal") {
+        if ($search == "jadwal") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?hariJadwal), '$action', 'i')
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?hariJadwal), '$search', 'i')
                 )}
             ";
         }
@@ -372,32 +281,29 @@ class Dosen extends WebProdiIlkom {
         return $data;
     }
 
-    function getDosenNilai($action = null) {
-        $query = "
-        PREFIX all:<http://www.semanticweb.org/aditf/ontologies/2024/4/main-ontology-jejaring-semantik#>
-        PREFIX d:<http://www.semanticweb.org/mak/ontologies/2024/4/jartik#>
-        PREFIX k:<http://www.semanticweb.org/kenneth/ontologies/2024/4/mahasiswa#>
-        PREFIX c:<http://www.semanticweb.org/crims/ontologies/2024/4/nilaijartik#>
+    public function getDosenNilai($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
             SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
             WHERE {
-                ?dosen d:nip ?nip ;
-                    d:namaDosen ?namaDosen ;
-                    d:statusKeaktifanDosen ?statusKeaktifanDosen ;
-                    d:unitKerjaDosen ?unitKerjaDosen ;
-                    all:mengisi ?nilai .
-                ?nilai c:ipkMahasiswa ?ipkMahasiswa.
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    d:mengisi ?nilai .
+                ?nilai ad:ipkMahasiswa ?ipkMahasiswa.
         ";
 
-        if ($action == "nilai") {
+        if ($search == "nilai") {
             $query .= "}";
         } else {
             $query .= " 
                 FILTER (
-                    regex(str(?nip), '$action', 'i') ||
-                    regex(str(?namaDosen), '$action', 'i') ||
-                    regex(str(?statusKeaktifanDosen), '$action', 'i') ||
-                    regex(str(?unitKerjaDosen), '$action', 'i') ||
-                    regex(str(?ipkMahasiswa), '$action', 'i')
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?ipkMahasiswa), '$search', 'i')
                 )}
             ";
         }
@@ -417,5 +323,5 @@ class Dosen extends WebProdiIlkom {
 
         return $data;
     }
+
 }
-?>
