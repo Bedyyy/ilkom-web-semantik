@@ -332,64 +332,73 @@ Javascript section for display search result
 document.getElementById('search-form').addEventListener('submit', function(e) {
   e.preventDefault();
   let query = document.getElementById('search-query').value;
-
-  // Mengarahkan pengguna ke halaman search.html dengan query pencarian sebagai parameter URL
   window.location.href = 'search.html?query=' + encodeURIComponent(query);
 });
 
 window.onload = function() {
-  // Mengambil query pencarian dari URL
   let params = new URLSearchParams(window.location.search);
   let query = params.get('query');
-
-  // Melakukan pencarian dan menampilkan hasilnya
   searchOntology(query);
 };
 
 function searchOntology(query) {
-  const url = new URL('http://localhost/Jentik-Front-End/lib/api.php');
-  url.searchParams.append('search', query);  // Menggunakan query untuk status sebagai contoh. Sesuaikan dengan kebutuhan Anda.
+  const url = new URL('http://localhost/ilkom-web-semantik/lib/api.php');
+  url.searchParams.append('search', query);
 
   fetch(url)
       .then(response => response.json())
-      .then(data => displayResults(data))
+      .then(data => displayResults(data, query))
       .catch(error => console.error('Error:', error));
 }
 
-function displayResults(data) {
+function displayResults(data, query) {
   let resultsContainer = document.getElementById('results');
   resultsContainer.innerHTML = '';
 
-  // Iterasi melalui setiap kategori dalam data
+  let totalData = 0;
+
   for (let category in data) {
-      let categoryContainer = document.createElement('div');
-      categoryContainer.className = 'category-container';
+    if (data[category].length === 0) continue;
 
-      let categoryTitle = document.createElement('h2');
-      categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-      categoryContainer.appendChild(categoryTitle);
+    totalData += data[category].length;
 
-      // Jika tidak ada item dalam kategori, tampilkan pesan "No results found"
-      if (data[category].length === 0) {
-          let p = document.createElement('p');
-          p.textContent = 'No results found';
-          categoryContainer.appendChild(p);
-      } else {
-          // Jika ada item dalam kategori, iterasi melalui setiap item dan tampilkan propertinya
-          data[category].forEach(item => {
-              let itemContainer = document.createElement('div');
-              itemContainer.className = 'item-container';
+    // Add a title for each category
+    let title = document.createElement('h2');
+    title.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+    resultsContainer.appendChild(title);
 
-              for (let key in item) {
-                  let p = document.createElement('p');
-                  p.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${item[key]}`;
-                  itemContainer.appendChild(p);
-              }
+    let table = document.createElement('table');
+    table.id = 'resultsTable-' + category;
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+    table.className = 'myTableClass';
+    resultsContainer.appendChild(table);
 
-              categoryContainer.appendChild(itemContainer);
-          });
+    let dataSet = [];
+    let columns = [];
+
+    data[category].forEach(item => {
+      let row = [];
+      for (let key in item) {
+        if (columns.indexOf(key) === -1) {
+          columns.push(key);
+        }
+        row.push(item[key]);
       }
-
-      resultsContainer.appendChild(categoryContainer);
+      dataSet.push(row);
+    });
+      $('#resultsTable-' + category).DataTable({
+        data: dataSet,
+        columns: columns.map(col => ({ title: col }))
+      });
   }
+
+  if (totalData === 0) {
+    let h1 = document.createElement('h1');
+    h1.textContent = 'No result found, try another';
+    h1.style.fontWeight = 'bold';
+    h1.style.fontSize = '2em';
+    h1.style.textAlign = 'center';
+    resultsContainer.appendChild(h1);
+}
 }
