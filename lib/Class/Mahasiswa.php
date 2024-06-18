@@ -45,7 +45,7 @@ class Mahasiswa extends WebProdiIlkom{
     public function getMahasiswaDosen($search=null){
         $prefix = $this->getPrefix();
         $query = $prefix . "
-            SELECT DISTINCT ?namaMahasiswa ?nim ?semester ?statusKemahasiswaan ?namaDosen ?nip ?statusKeaktifanDosen ?unitKerjaDosen
+            SELECT ?namaMahasiswa ?nim ?semester ?statusKemahasiswaan ?namaDosen ?nip ?statusKeaktifanDosen ?unitKerjaDosen
             WHERE{
                 ?mahasiswa 	k:namaMahasiswa ?namaMahasiswa; 
                             k:nim ?nim;
