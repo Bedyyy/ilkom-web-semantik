@@ -67,6 +67,7 @@ $response = [
     'dosen_Organisasi' => $dosen->getDosenOrganisasi($search),
     'dosen_Jadwal' => $dosen->getDosenJadwal($search),
     'dosen_Nilai' => $dosen->getDosenNilai($search),
+    'dosen_Rps' => $dosen->getDosenRps($search),
 
     //Prestasi
     'prestasi_Mahasiswa' => $prestasi->getPrestasiMahasiswa($search),

@@ -103,7 +103,7 @@ class Dosen extends WebProdiIlkom{
     public function getDosenMatakuliah($search = null) {
         $prefix = $this->getPrefix();
         $query = $prefix . "
-            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
+            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMatkul ?kodeMatkul ?bobotSKS
             WHERE {
                 ?dosen al:nip ?nip ;
                     al:namaDosen ?namaDosen ;
@@ -152,7 +152,7 @@ class Dosen extends WebProdiIlkom{
     public function getDosenPrestasi($search = null) {
         $prefix = $this->getPrefix();
         $query = $prefix . "
-            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
+            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaKegiatan ?hariJadwal ?ipkMahasiswa
             WHERE {
                 ?dosen al:nip ?nip ;
                     al:namaDosen ?namaDosen ;
@@ -197,7 +197,7 @@ class Dosen extends WebProdiIlkom{
     public function getDosenOrganisasi($search = null) {
         $prefix = $this->getPrefix();
         $query = $prefix . "
-            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?namaOrganisasi ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
+            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaOrganisasi
             WHERE {
                 ?dosen al:nip ?nip ;
                     al:namaDosen ?namaDosen ;
@@ -240,7 +240,7 @@ class Dosen extends WebProdiIlkom{
     public function getDosenJadwal($search = null) {
         $prefix = $this->getPrefix();
         $query = $prefix . "
-            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
+            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?hariJadwal
             WHERE {
                 ?dosen al:nip ?nip ;
                     al:namaDosen ?namaDosen ;
@@ -248,7 +248,6 @@ class Dosen extends WebProdiIlkom{
                     al:unitKerjaDosen ?unitKerjaDosen ;
                     al:menghadiri ?jdwl .
                 ?jdwl d:hariJadwal ?hariJadwal.
-                ?nilai ad:ipkMahasiswa ?ipkMahasiswa.
         ";
 
         if ($search == "jadwal") {
@@ -284,7 +283,7 @@ class Dosen extends WebProdiIlkom{
     public function getDosenNilai($search = null) {
         $prefix = $this->getPrefix();
         $query = $prefix . "
-            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?namaMahasiswa ?namaMatkul ?namaKegiatan ?hariJadwal ?statusKemahasiswaan ?ipkMahasiswa ?nim ?semester ?kodeMatkul ?bobotSKS ?kategori ?pencapaian ?tingkatan ?tahun ?jamJadwal ?ruanganJadwal
+            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?ipkMahasiswa
             WHERE {
                 ?dosen al:nip ?nip ;
                     al:namaDosen ?namaDosen ;
@@ -318,6 +317,55 @@ class Dosen extends WebProdiIlkom{
                 'statusKeaktifanDosen' =>$row['statusKeaktifanDosen'],
                 'unitKerjaDosen' => $row['unitKerjaDosen'],
                 'ipkMahasiswa' => $row['ipkMahasiswa'],
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getDosenRPS($search = null) {
+        $prefix = $this->getPrefix();
+        $query = $prefix . "
+            SELECT ?nip ?namaDosen ?statusKeaktifanDosen ?unitKerjaDosen ?kodeRPS ?tahunPembuatan ?statusRPS
+            WHERE {
+                ?dosen al:nip ?nip ;
+                    al:namaDosen ?namaDosen ;
+                    al:statusKeaktifanDosen ?statusKeaktifanDosen ;
+                    al:unitKerjaDosen ?unitKerjaDosen ;
+                    d:menyusun ?rps .
+                ?rps d:kodeRPS ?kodeRPS;
+                    d:tahunPembuatan ?tahunPembuatan;
+                    d:statusRPS ?statusRPS.
+        ";
+
+        if ($search == "rps") {
+            $query .= "}";
+        } else {
+            $query .= " 
+                FILTER (
+                    regex(str(?nip), '$search', 'i') ||
+                    regex(str(?namaDosen), '$search', 'i') ||
+                    regex(str(?statusKeaktifanDosen), '$search', 'i') ||
+                    regex(str(?unitKerjaDosen), '$search', 'i') ||
+                    regex(str(?kodeRPS), '$search', 'i') ||
+                    regex(str(?tahunPembuatan), '$search', 'i') ||
+                    regex(str(?statusRPS), '$search', 'i')
+                )}
+            ";
+        }
+
+        $result = sparql_query($query);
+
+        $data = [];
+        while ( $row = sparql_fetch_array($result) ) {
+            $data[] = [
+                'nip' => $row['nip'],
+                'namaDosen' => $row['namaDosen'],
+                'statusKeaktifanDosen' =>$row['statusKeaktifanDosen'],
+                'unitKerjaDosen' => $row['unitKerjaDosen'],
+                'kodeRPS' => $row['kodeRPS'],
+                'tahunPembuatan' => $row['tahunPembuatan'],
+                'statusRPS' => $row['statusRPS']
             ];
         }
 
